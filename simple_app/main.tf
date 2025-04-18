@@ -18,7 +18,7 @@ resource "aws_s3_bucket" "input_data" {
 }
 
 resource "aws_s3_bucket" "output_data" {
-  bucket = "output-data-terraform-practice-101"
+  bucket        = "output-data-terraform-practice-101"
   force_destroy = true
 }
 
@@ -28,11 +28,11 @@ data "aws_iam_policy_document" "topic_policy_document" {
     effect = "Allow"
 
     principals {
-      type = "Service"
+      type        = "Service"
       identifiers = ["s3.amazonaws.com"]
     }
 
-    actions = ["SNS:Publish"]
+    actions   = ["SNS:Publish"]
     resources = [aws_sns_topic.input_data_topic.arn]
 
     condition {
@@ -45,7 +45,7 @@ data "aws_iam_policy_document" "topic_policy_document" {
 
 # SNS topic for S3 input notification
 resource "aws_sns_topic" "input_data_topic" {
-  name = "input_data_topic"
+  name         = "input_data_topic"
   display_name = "input-data-topic"
 }
 
@@ -59,8 +59,8 @@ resource "aws_sns_topic_policy" "input_sns_topic_policy" {
 resource "aws_s3_bucket_notification" "input_bucket_notification" {
   bucket = aws_s3_bucket.input_data.bucket
   topic {
-    events = ["s3:ObjectCreated:*"]
-    topic_arn = aws_sns_topic.input_data_topic.arn
+    events        = ["s3:ObjectCreated:*"]
+    topic_arn     = aws_sns_topic.input_data_topic.arn
     filter_prefix = "input/"
   }
   depends_on = [aws_sns_topic_policy.input_sns_topic_policy]
@@ -82,10 +82,10 @@ resource "aws_iam_role" "iam_for_lambda" {
     ]
   })
 
-#   managed_policy_arns = [
-#     "arn:aws:iam::aws:policy/AmazonSNSReadOnlyAccess",
-#     "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-#   ]
+  #   managed_policy_arns = [
+  #     "arn:aws:iam::aws:policy/AmazonSNSReadOnlyAccess",
+  #     "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+  #   ]
 }
 
 # Attach custom read s3 bucket policies to the IAM role
@@ -112,7 +112,7 @@ resource "aws_iam_role_policy" "lambda_read_s3_policy" {
 
 # Attach AWS managed policies to the IAM role
 resource "aws_iam_role_policy_attachments_exclusive" "lambda_policy_attachments" {
-  role_name   = aws_iam_role.iam_for_lambda.name
+  role_name = aws_iam_role.iam_for_lambda.name
   policy_arns = [
     "arn:aws:iam::aws:policy/AmazonSNSReadOnlyAccess",
     "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
@@ -122,7 +122,7 @@ resource "aws_iam_role_policy_attachments_exclusive" "lambda_policy_attachments"
 # Lambda function files and configurations
 data "archive_file" "lambda_file" {
   type        = "zip"
-  source_dir = "_lambda/code"
+  source_dir  = "_lambda/code"
   output_path = "output/_lambda/code/lambda_function_payload.zip"
 }
 
@@ -140,7 +140,7 @@ resource "aws_lambda_permission" "sns_invoke_lambda" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.lambda_function.function_name
   principal     = "sns.amazonaws.com"
-  source_arn = aws_sns_topic.input_data_topic.arn
+  source_arn    = aws_sns_topic.input_data_topic.arn
 }
 
 # SNS topic subscription to lambda function

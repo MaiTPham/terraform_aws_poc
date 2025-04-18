@@ -1,7 +1,13 @@
 variable "shared_credentials_file" {
   description = "The path to the shared credentials file"
   type        = string
-  default     = "~/.aws/credentials"
+  sensitive   = true
+  nullable    = false
+}
+
+variable "shared_config_file" {
+  description = "The path to the shared config file"
+  type        = string
   sensitive   = true
   nullable    = false
 }
@@ -9,7 +15,6 @@ variable "shared_credentials_file" {
 variable "aws_profile" {
   description = "The AWS profile to use"
   type        = string
-  default     = "self"
   nullable    = false
 }
 
