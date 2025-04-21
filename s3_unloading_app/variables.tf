@@ -48,3 +48,9 @@ variable "common_tags" {
   nullable = false
 }
 
+variable "snowflake_external_id" {
+  description = "The external ID for Snowflake"
+  type        = string
+  nullable    = false
+}
+

@@ -55,11 +55,13 @@ resource "aws_iam_role" "unloading_role" {
         Effect = "Allow"
         Action = "sts:AssumeRole"
         Principal = {
-          "AWS" : var.aws_account_id # todo: temporarily current AWS account ID, modify the trust relationship later
+          "AWS" : "arn:aws:iam::333861696097:user/d9mz0000-s"
+          # "AWS" : var.aws_account_id # todo: temporarily current AWS account ID, modify the trust relationship later
         }
         "Condition" = {
           "StringEquals" = {
-            "sts:ExternalId" = "0000" # todo: placeholder ID such as 0000, modify the trust relationship later
+            "sts:ExternalId" = var.snowflake_external_id
+            # "sts:ExternalId" = "0000" # todo: placeholder ID such as 0000, modify the trust relationship later
           }
         }
       }
