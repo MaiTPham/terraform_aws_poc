@@ -1,0 +1,5 @@
+bucket                  = "terraform-practice-101"
+key                     = "s3_unloading_app/state/terraform.tfstate"
+region                  = "us-east-1"
+shared_credentials_file = "~/.aws/credentials" // Could set in git
+profile                 = "self"
